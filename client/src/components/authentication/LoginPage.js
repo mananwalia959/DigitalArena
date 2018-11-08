@@ -20,19 +20,6 @@ class Login extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  componentDidMount() {
-    if (this.props.auth.isAuthenticated) {
-      this.props.history.push('/dashboard');
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.auth.isAuthenticated) {
-      this.props.history.push('/dashboard');
-    }
-
-    
-  }
 
   onSubmit(e) {
     e.preventDefault();
@@ -45,20 +32,18 @@ class Login extends Component {
     axios.post(baseapi+"/user/login",userData)
     .then((response)=>{
         if (response.status===200){
-          console.log('haha')
-          console.log(response.data) 
           this.props.loginUser(response.data)
         }
 
     })
     .catch((error)=>{
         console.log(error);  
-        // if (error.response.status===401){
-        //   this.setState(()=>({error:error.response.data.message}))
-        // }
-        // else {
-        //   this.setState(()=>({pageError:"something went wrong Please try again later or refresh"}))
-        // }
+        if (error.response.status===401){
+          this.setState(()=>({error:error.response.data.message}))
+        }
+        else {
+          this.setState(()=>({pageError:"something went wrong Please try again later or refresh"}))
+        }
     })
   }
 
@@ -112,6 +97,7 @@ class Login extends Component {
 const mapStateToProps = state => ({
   auth: state.auth
 });
+
 const mapDispatchToProps = dispatch => ({
   loginUser: user => dispatch(loginUser(user)),
 })

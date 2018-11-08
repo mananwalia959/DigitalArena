@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-
+import {logoutUser} from '../../actions/Authactions'
 class Navbar extends Component {
  
 
@@ -17,7 +17,7 @@ class Navbar extends Component {
         </li>
         <li className="nav-item">
         <p className="nav-link" onClick={()=>{
-          console.log("clicked")
+          this.props.logoutUser();
         }
           
         } >
@@ -74,8 +74,12 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
+const mapDispatchToProps = dispatch => ({
+  logoutUser: () => dispatch(logoutUser()),
+})
 
 
-export default connect(mapStateToProps)(
+
+export default connect(mapStateToProps,mapDispatchToProps)(
   Navbar
 );

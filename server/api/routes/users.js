@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const userauth =require('../auth-middlewares/userauth')
 
 router.post("/signup", (req, res, next) => {
 
@@ -156,5 +157,23 @@ router.post("/login", (req, res, next) => {
     });
   });
 
+
+  router.post("/test", userauth,(req, res, next) => {
+    User.findOne({_id:req.userData.userId })
+      .exec()
+      .then(user =>{
+        res.status(200).json({
+          name:user.name,
+          email:user.email
+        })
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json({
+          error: err
+        });
+      });
+    });
+  
 
 module.exports = router;

@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 
-const setAuthToken = token => {
+export const setAuthToken = token => {
   if (token) {
     // Apply to every request
-    axios.defaults.headers.common['Authorization'] = token;
+    axios.defaults.headers.common['Authorization'] ='Bearer '+ token;
   } else {
     // Delete auth header
     delete axios.defaults.headers.common['Authorization'];
@@ -44,6 +44,15 @@ export const setCurrentUser = user => {
   };
 };
 
+// Log user out
+export const logoutUser = () => dispatch => {
+  // Remove token from localStorage
+  localStorage.removeItem('jwtToken');
+  // Remove auth header for future requests
+  setAuthToken(false);
+  // Set current user to {} which will set isAuthenticated to false
+  dispatch(setCurrentUser({}));
+};
 
 
 

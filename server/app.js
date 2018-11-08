@@ -7,7 +7,7 @@ const mongoose =require('mongoose');
 var cors = require('cors');
 
 //importing routes
-// const productRoutes = require('./api/routes/products');
+ const productRoutes = require('./api/routes/products');
 // const orderRoutes = require('./api/routes/orders');
 const userRoutes = require('./api/routes/users');
 
@@ -33,7 +33,7 @@ app.use(cors());
 
 
 //Routes used
-// app.use('/products',productRoutes);
+app.use('/products',productRoutes);
 // app.use('/orders',orderRoutes);
 app.use("/user", userRoutes);
 
