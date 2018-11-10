@@ -7,23 +7,28 @@ import Header from '../components/header/Navbar'
 import Dashboard from '../components/Dashboard/Dashboard'
 import UserOnly from "../components/common/UserOnly";
 import GuestOnly from "../components/common/GuestOnly";
+import NotfoundPage from '../components/common/NotfoundPage'
+import Product from '../components/Product/Product'
+import CartPage from '../components/Cart/Cart'
 
-const BasicExample = () => (
+
+const MainRouter = () => (
   <Router>
     <div>
     <Header />
     
       <div className="container">
-      <Route exact path="/" component={HomePage} />
       <Switch>
+      <Route exact path="/" component={HomePage} /> 
       <GuestOnly exact={true} path="/login" component={LoginPage} />
       <GuestOnly exact={true} path="/signup" component={SignupPage} />
-      </Switch>
-      <Switch>
       <UserOnly exact={true} path = "/dashboard" component={Dashboard} />
+      <UserOnly exact={true} path = "/mycart" component={CartPage} />
+      <Route path="/product/:id" component={Product} />
+      <Route component={NotfoundPage} />
       </Switch>
       </div>
     </div>
   </Router>
 );
-export default BasicExample;
+export default MainRouter;

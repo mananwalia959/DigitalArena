@@ -65,7 +65,7 @@ const Product = require('../models/products')
 
 router.get('/',(req,res,next)=>{
   Product.find()
-  .select("title price _id imagePath")
+  .select("title price _id imagePath status")
   .exec()
   .then(docs => {
       const response = {
@@ -75,6 +75,7 @@ router.get('/',(req,res,next)=>{
             title: doc.title,
             price: doc.price,
             imagePath: doc.imagePath,
+            status:doc.status,
             _id: doc._id,
             request: {
               type: "GET",
@@ -94,6 +95,33 @@ router.get('/',(req,res,next)=>{
     });
 });
 
+
+router.get('/:productId', (req, res, next) => {
+  const id = req.params.productId;
+  Product.findById(id)
+  .select('title price _id imagePath description status')
+  .exec()
+  .then(doc => {
+    console.log("From database", doc);
+    if (doc) {
+      res.status(200).json({
+          product: doc,
+          request: {
+              type: 'GET',
+              url:'/products'
+          }
+      });
+    } else {
+      res
+        .status(404)
+        .json({ message: "No valid entry found for provided ID" });
+    }
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(500).json({ error: err });
+  });
+});
 
 
 module.exports = router;

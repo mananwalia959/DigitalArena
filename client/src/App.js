@@ -12,16 +12,16 @@ class App extends Component {
   constructor(){
     super();
     this.state = {
-      waiting:true
+      loaded:false
     };
   }
 
-  componentWillMount(){
+  componentDidMount(){
     if (localStorage.jwtToken) {
       setAuthToken(localStorage.jwtToken);
       axios.post(baseapi+'/user/test')
       .then((response)=>{
-        const {name,email}=response.data;
+        const {name,email,cart}=response.data;
         store.dispatch( {
           type: 'SET_CURRENT_USER',
           payload: {
@@ -29,22 +29,37 @@ class App extends Component {
             email
           },
         })
+
+        store.dispatch({
+          type: 'SET_CART',
+          payload: cart
+        })
+
+        this.setState(()=>({
+          loaded:true
+        }))
       })
       .catch((error)=>{
         setAuthToken(false);
+        this.setState(()=>({
+          loaded:true
+        }))
       });
       
     }
-    console.log("haha")
-
-
   }
   render() {
     return (
       <div>
-      <Provider store={store}>
+      {!this.state.loaded?
+        <h1> Please Wait</h1>
+        :
+        <Provider store={store}>
       <Router />
       </Provider>
+      }
+      
+      
       </div>
     );
   }

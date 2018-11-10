@@ -29,9 +29,7 @@ export const loginUser = userData =>dispatch => {
           email
         }
       })
-    );
-    
-    
+    ); 
 };
 
 

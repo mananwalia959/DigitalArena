@@ -137,7 +137,8 @@ router.post("/login", (req, res, next) => {
               message: "Auth successful",
               token: token,
               name:user.name,
-              email:user.email
+              email:user.email,
+              cart:user.cart
             });
           }
           if(!result){
@@ -164,7 +165,8 @@ router.post("/login", (req, res, next) => {
       .then(user =>{
         res.status(200).json({
           name:user.name,
-          email:user.email
+          email:user.email,
+          cart:user.cart
         })
       })
       .catch(err => {

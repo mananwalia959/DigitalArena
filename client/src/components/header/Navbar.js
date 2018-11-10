@@ -16,7 +16,11 @@ class Navbar extends Component {
           </Link>
         </li>
         <li className="nav-item">
-        <p className="nav-link" onClick={()=>{
+        <p 
+        style = {
+         {cursor:"pointer"} 
+        }
+        className="nav-link" onClick={()=>{
           this.props.logoutUser();
         }
           

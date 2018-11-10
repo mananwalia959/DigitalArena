@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { loginUser } from '../../actions/Authactions';
+import { setCart } from '../../actions/CartActions';
 import TextFieldGroup from '../common/TextFieldGroup';
 import axios from 'axios';
 import {baseapi} from '../../config/values';
@@ -33,12 +34,13 @@ class Login extends Component {
     .then((response)=>{
         if (response.status===200){
           this.props.loginUser(response.data)
+          this.props.setCart(response.data.cart)
         }
 
     })
     .catch((error)=>{
         console.log(error);  
-        if (error.response.status===401){
+        if (error.response.status &&error.response.status===401){
           this.setState(()=>({error:error.response.data.message}))
         }
         else {
@@ -60,7 +62,7 @@ class Login extends Component {
             <div className="col-md-8 m-auto">
               <h1 className="display-4 text-center">Log In</h1>
               <p className="lead text-center">
-                Sign in to your DevConnector account
+                Sign in to your Digital Arena account
               </p>
               {this.state.pageError && <p>{this.state.pageError}</p>}
               <form onSubmit={this.onSubmit}>
@@ -100,6 +102,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   loginUser: user => dispatch(loginUser(user)),
+  setCart: products => dispatch(setCart(products)),
 })
 
 
