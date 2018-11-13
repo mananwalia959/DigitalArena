@@ -25,7 +25,7 @@ class HomePage extends Component {
   render() {
     return (
       <div>
-      {!this.state.loaded?<h1>Please wait</h1>:<ProductList products={this.state.products} />}
+      {!this.state.loaded?<h1>Please wait....</h1>:<ProductList products={this.state.products} />}
       </div>
       
     );

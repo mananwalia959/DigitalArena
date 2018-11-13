@@ -41,11 +41,23 @@ class App extends Component {
       })
       .catch((error)=>{
         setAuthToken(false);
+        store.dispatch( {
+          type: 'SET_CURRENT_USER',
+          payload: {
+          },
+        })
         this.setState(()=>({
           loaded:true
         }))
       });
       
+    }
+    else{
+      this.setState(()=>({
+        loaded:true
+      }))
+      
+
     }
   }
   render() {

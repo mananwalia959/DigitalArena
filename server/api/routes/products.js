@@ -123,5 +123,35 @@ router.get('/:productId', (req, res, next) => {
   });
 });
 
+router.post('/getproductsbyid',(req,res,next)=>{
+  console.log(req.body)
+  let arr = req.body.productList.map(ele =>  mongoose.Types.ObjectId(ele));
+  Product.find({
+    '_id': { $in: arr}
+  })
+  .exec()
+  .then(docs => {
+    const response = {
+      count: docs.length,
+      products: docs.map(doc => {
+        return {
+          title: doc.title,
+          price: doc.price,
+          imagePath: doc.imagePath,
+          status:doc.status,
+          _id: doc._id,
+        };
+      })
+    };
+    res.status(200).json(response);
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(500).json({
+      error: err
+    });
+  });
+})
+
 
 module.exports = router;

@@ -10,6 +10,8 @@ import GuestOnly from "../components/common/GuestOnly";
 import NotfoundPage from '../components/common/NotfoundPage'
 import Product from '../components/Product/Product'
 import CartPage from '../components/Cart/Cart'
+import Orders from '../components/orders/Orders'
+import Success from '../components/orders/Success'
 
 
 const MainRouter = () => (
@@ -25,6 +27,8 @@ const MainRouter = () => (
       <UserOnly exact={true} path = "/dashboard" component={Dashboard} />
       <UserOnly exact={true} path = "/mycart" component={CartPage} />
       <Route path="/product/:id" component={Product} />
+      <UserOnly exact={true} path="/orders" component={Orders} />
+      <Route exact={true} path="/order/success" component={Success} />
       <Route component={NotfoundPage} />
       </Switch>
       </div>
