@@ -7,6 +7,7 @@ const ProductGridLayout=(props)=>(
     <div className="card col-lg-3 col-md-4 col-sm-6" >
       <img  src={props.product.imagePath} 
       className='card-img-top'
+      alt={props.product.title}
       />
     <div className="card-body">
       <h5 className="card-title">{props.product.title} </h5>

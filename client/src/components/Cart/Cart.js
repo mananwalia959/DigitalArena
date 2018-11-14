@@ -33,9 +33,10 @@ class CartPage extends Component {
         <nav className="navbar navbar-dark bg-dark">
         <p className="navbar-brand"> You have {this.props.cart.productList.length} {this.props.cart.productList.length===1?'product':'products'} in your cart</p>
 
-        <li className="nav-item">
-        <Link to='/checkout' className="btn btn-primary"> Checkout </Link>
-      </li>
+
+       {this.props.cart.productList.length===0?"":<li className="nav-item">
+       <Link to='/checkout' className="btn btn-primary"> Checkout </Link>
+     </li>}
         </nav>
        
 

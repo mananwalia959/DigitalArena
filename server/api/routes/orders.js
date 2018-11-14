@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const moment = require('moment')
 const temporder=require('../models/temporder')
+const pincodes = require('../models/pincodes')
 
 
 
@@ -13,7 +14,13 @@ Insta.isSandboxMode(true);
 
 
 
-router.get('/',(req,res,next)=>{
+router.post('/create',(req,res,next)=>{
+  const order = new temporder({
+    _id: new mongoose.Types.ObjectId(),
+    user:req.userData.userId,
+    
+  
+  });
 
    
     Insta.createPayment({amount:5000,
@@ -63,36 +70,23 @@ router.get('/',(req,res,next)=>{
 
 
 
- router.get('/testschema',(req,res,next)=>{
-  const order = new temporder({
-    _id: new mongoose.Types.ObjectId(),
-    name:'hahahaha',
-  
-  });
-  order
-    .save()
-    .then(result => {
-      console.log(result); 
-      res.status(201).json({
-        message: "order created"
-      });
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({
-        error: err
-      });
-    });   
-})
-
-
-router.get('/testschema2',(req,res,next)=>{
-  temporder.find()
+ router.post('/checkpincode',(req,res,next)=>{
+     pincodes.find({pincode:req.body.pincode})
   .then(result => {
-    console.log(result); 
-    res.status(201).json({
-      message: result.length
-    });
+    if(result.length>0){
+      console.log('yay')
+      res.status(201).json({
+        message: "Address correct"
+      });
+    }
+    else{
+      console.log('nay')
+      res.status(400).json({
+       
+        message: "Address incorrect"
+      });
+
+    }
   })
   .catch(err => {
     console.log(err);
@@ -101,7 +95,26 @@ router.get('/testschema2',(req,res,next)=>{
     });
   });   
 
+  
 })
+
+
+// router.get('/testschema2',(req,res,next)=>{
+//   temporder.find()
+//   .then(result => {
+//     console.log(result); 
+//     res.status(201).json({
+//       message: result.length
+//     });
+//   })
+//   .catch(err => {
+//     console.log(err);
+//     res.status(500).json({
+//       error: err
+//     });
+//   });   
+
+// })
 
 
 

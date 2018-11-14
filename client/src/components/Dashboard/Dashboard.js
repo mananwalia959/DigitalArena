@@ -8,11 +8,20 @@ class DashBoard extends Component {
     return (
    
       <div className='text-xs-center text-xl-center0.'>
-     <p>  this is the DashBoard page of {this.props.auth.user.name}</p>
-
-     <Link to="/mycart" className="btn btn-primary"> Go To Cart </Link>
+     <h1 className='card-title'> {this.props.auth.user.name}'s Dashboard</h1>
      <br/>
-     <Link to="/orders" className="btn btn-primary"> Go To Orders </Link>
+     <div className='row'>
+     <div className=' col-md-6 col-sm-12 '>
+     <Link to="/mycart" className=" pt-4 pb-4 btn btn-primary container-fluid"><h4 className='card-title'> Go To Cart </h4></Link>
+     </div>
+
+
+     <div className=' col-md-6 col-sm-12 '>
+     <Link to="/orders" className=" pt-4 pb-4 btn btn-primary container-fluid"><h4 className='card-title'> Go To Orders </h4></Link>
+     </div>
+     </div>
+
+
       </div>
  
     );
