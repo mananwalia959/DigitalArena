@@ -177,5 +177,8 @@ router.post("/login", (req, res, next) => {
       });
     });
   
+  router.get('/getorders',userauth,(req,res,next)=>{
+    res.status(200).json('yup')
+  })
 
 module.exports = router;

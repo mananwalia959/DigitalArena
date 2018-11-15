@@ -154,6 +154,7 @@ router.post('/create',userauth,checkaddress,checkamount,(req,res,next)=>{
         temporder.findOne({_id:response.payment_request.buyer_name})
         .then(result => {
           console.log(result); 
+          if(result){
             const order = new Orders({ 
               _id: new mongoose.Types.ObjectId(),
               user:result.user,
@@ -161,6 +162,8 @@ router.post('/create',userauth,checkaddress,checkamount,(req,res,next)=>{
               pincode:result.pincode,
               amount:result.amount,
               productlist:result.productlist,
+              payment_request_id,
+              payment_id
 
             })
 
@@ -173,6 +176,13 @@ router.post('/create',userauth,checkaddress,checkamount,(req,res,next)=>{
               res.redirect(process.env.CLIENT_URL+'/order/failure')
 
             })
+
+          }
+          else{
+            res.redirect(process.env.CLIENT_URL+'/order/failure')
+
+          }
+            
 
           
         })
