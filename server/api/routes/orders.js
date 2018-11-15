@@ -7,6 +7,7 @@ const pincodes = require('../models/pincodes')
 const userauth=require('../auth-middlewares/userauth')
 const Insta = require('instamojo-nodejs');
 const Product=require('../models/products')
+const Orders=require('../models/orders')
 
 
 Insta.setKeys(process.env.PAYMENT_API_KEY, process.env.PAYMENT_PRIVATE_AUTH_TOKEN);
@@ -142,7 +143,9 @@ router.post('/create',userauth,checkaddress,checkamount,(req,res,next)=>{
    console.log(payment_id,payment_request_id);
    Insta.getPaymentDetails(payment_request_id, payment_id, function(error, response) {
     if (error) {
-      res.redirect('http://www.youtube.com')
+      console.log('doody')
+      res.redirect(process.env.CLIENT_URL+'/order/failure')
+
     } else {
       if (response.payment_request.status==='Completed'){
         console.log(response)
@@ -151,21 +154,37 @@ router.post('/create',userauth,checkaddress,checkamount,(req,res,next)=>{
         temporder.findOne({_id:response.payment_request.buyer_name})
         .then(result => {
           console.log(result); 
-          res.status(201).json({
-            message: result
-          });
+            const order = new Orders({ 
+              _id: new mongoose.Types.ObjectId(),
+              user:result.user,
+              address:result.address,
+              pincode:result.pincode,
+              amount:result.amount,
+              productlist:result.productlist,
+
+            })
+
+            order.save()
+            .then((response)=>{
+              res.redirect(process.env.CLIENT_URL+'/order/success')
+            })
+            .catch((failed)=>{
+              console.log("howdy");
+              res.redirect(process.env.CLIENT_URL+'/order/failure')
+
+            })
+
+          
         })
         .catch(err => {
           console.log(err);
-          res.status(500).json({
-            error: err
-          });
+          res.redirect(process.env.CLIENT_URL+'/order/failure')
         });   
         
       }
       else{
         console.log(response)
-        res.redirect('http://www.youtube.com')
+        res.redirect(process.env.CLIENT_URL+'/order/failure')
       }
     }
   });

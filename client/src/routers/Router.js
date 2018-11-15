@@ -12,6 +12,7 @@ import Product from '../components/Product/Product'
 import CartPage from '../components/Cart/Cart'
 import Orders from '../components/orders/Orders'
 import Success from '../components/orders/Success'
+import Failure from '../components/orders/Failure'
 import Checkout from '../components/Checkout/Checkout'
 
 
@@ -30,6 +31,7 @@ const MainRouter = () => (
       <Route path="/product/:id" component={Product} />
       <UserOnly exact={true} path="/orders" component={Orders} />
       <Route exact={true} path="/order/success" component={Success} />
+      <Route exact={true} path="/order/failure" component={Failure} />
       <UserOnly exact={true} path ='/checkout' component={Checkout}/>
       <Route component={NotfoundPage} />
       </Switch>
