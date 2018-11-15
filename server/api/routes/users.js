@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const userauth =require('../auth-middlewares/userauth')
+const Orders=require('../models/orders')
 
 router.post("/signup", (req, res, next) => {
 
@@ -178,7 +179,18 @@ router.post("/login", (req, res, next) => {
     });
   
   router.get('/getorders',userauth,(req,res,next)=>{
-    res.status(200).json('yup')
+    Orders.find({user:req.userData.userId})
+    .sort({createdAt: -1})
+    .populate('productlist.productid') 
+    .exec()
+    .then((orders)=>{
+      res.status(200).json({orders:orders})
+    })
+    .catch((error)=>{
+      console.log(error)
+    res.status(500).json({err:error})
+    })
+    
   })
 
 module.exports = router;
