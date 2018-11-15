@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom'
 
 const ProductGridLayout=(props)=>(
     
-    <div className="card col-lg-3 col-md-4 col-sm-6" >
+    <div className="card col-lg-3 col-md-4 col-sm-6"  >
       <img  src={props.product.imagePath} 
       className='card-img-top'
       alt={props.product.title}

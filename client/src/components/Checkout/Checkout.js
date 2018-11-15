@@ -50,6 +50,53 @@ class Orders extends Component {
        
     }
 
+    Createorder=()=>{
+               const modifiedproducts=this.state.products.map(element=>{
+            return {
+                productid:element._id,
+                count:element.count
+            }
+
+        })
+        this.setState(()=>({loaded:false}))
+        
+
+
+       axios.post(baseapi+'/orders/create',{
+           products:modifiedproducts,
+           address:this.state.address,
+           amount:this.state.amount,
+           pincode:this.state.pincode
+       })
+       .then((response)=>{
+           console.log(response.data)
+           this.setState(()=>({
+               link:response.data.payment_link,
+               loaded:true
+            }))
+           
+       })
+       .catch((error)=>{
+           console.log(error.response)
+           if(error.response.data.message){
+               this.setState(()=>{
+                   return {
+                    message:error.response.data.message,
+                    loaded:true  
+                   }
+               })
+           }
+           else{
+            this.setState(()=>{
+                return {
+                 message:'Something went wrong please refresh',
+                 loaded:true 
+                }
+            })
+           }
+       })
+    }
+
     CalculateAmount=()=>{
         let amount=0;
         this.state.products.forEach((product)=>{
@@ -107,11 +154,17 @@ class Orders extends Component {
       onChange=(e)=> {
         this.setState({ [e.target.name]: e.target.value });
       }
+      onNumberChange=(e)=>{
+          if (e.target.value>=0||e.target.value===''){
+            this.setState({ [e.target.name]: e.target.value });
+          }
+
+      }
     
 
   render() {
     return (
-      !this.state.loaded?"Loading":
+      !this.state.loaded?<h1 className='centereverything'>Loading</h1>:
       
       this.state.link!==''?<div className='centereverything'>
       <a href={this.state.link} className='btn btn-danger'> Go To Payment portal</a>
@@ -120,7 +173,7 @@ class Orders extends Component {
       </div>:
       
       (<div>
-        {this.state.message===''?'':<div class = 'row'>
+        {this.state.message===''?'':<div className = 'row'>
         
         <h3 className='mx-auto'> {this.state.message} </h3>
         <br/>
@@ -137,7 +190,7 @@ class Orders extends Component {
      
             <div className='col-4  col-md-4 col-lg-4 '> 
 
-            <button className='btn btn-primary'>Create Order</button>
+            {this.state.amount===0?'':<button  onClick={this.Createorder} className='btn btn-primary'>Create Order</button>}
             </div>
       </div>
       </div>
@@ -147,7 +200,7 @@ class Orders extends Component {
       
       <div className=' row'>
         <div className='col-10 col-md-3  '><h4> Address</h4></div>
-        <div className='col-11 col-md-8 '>  
+        <div className='col-11 col-md-9 '>  
         <textarea  
         className="form-control noresize"
          rows="5"
@@ -161,14 +214,15 @@ class Orders extends Component {
 
       <div className='row'>
                <div className='col-4 col-md-3' > <h4 > Pincode</h4></div>
-                <div className='col-7 col-md-6'><input  name='pincode'
+                <div className='col-7 col-md-4'><input  name='pincode'
+                type='number'
                 value={this.state.pincode}
-                onChange={this.onChange}
+                onChange={this.onNumberChange}
                 className="form-control noresize"
                     rows="5" id="comment"></input></div>
 
-                <button className= 'col-2 col-md-2 ' onClick={this.CheckAvailability} 
-                className='btn btn-primary'
+                <button className= 'col-6 col-md-4 btn btn-primary' onClick={this.CheckAvailability} 
+                
                 > Check Availability 
                 </button>
       <div>

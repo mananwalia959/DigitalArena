@@ -4,28 +4,113 @@ const mongoose = require("mongoose");
 const moment = require('moment')
 const temporder=require('../models/temporder')
 const pincodes = require('../models/pincodes')
-
-
-
-
+const userauth=require('../auth-middlewares/userauth')
 const Insta = require('instamojo-nodejs');
+const Product=require('../models/products')
+
+
 Insta.setKeys(process.env.PAYMENT_API_KEY, process.env.PAYMENT_PRIVATE_AUTH_TOKEN);
 Insta.isSandboxMode(true);
 
 
+const checkaddress =(req,res,next)=>{
+  if(req.body.address){
+    pincodes.find({pincode:req.body.pincode})
+    .then(result => {
+    if(result.length>0){
+      next()
+    }
+    else{
+      res.status(400).json({
+        message: "We do not ship to that pincode"
+      });
 
-router.post('/create',(req,res,next)=>{
+    }
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(500).json({
+      error: err
+    });
+  });   
+    
+  }
+  else{
+    res.status(400).json({
+      message:"Address is Required"
+    })
+  }
+}
+
+
+const checkamount =(req,res,next)=>{
+  console.log('yuuuuuuuuuup')
+  console.log(req.body.products)
+  let arr = req.body.products.map(ele =>  mongoose.Types.ObjectId(ele.productid));
+
+
+  const getcount = (id)=>{
+    counted=0
+
+    chosenproduct = req.body.products.forEach((product)=>{
+      if(product.productid===id){
+        counted=product.count
+      }
+    })
+    return counted
+  }
+
+  Product.find({
+    '_id': { $in: arr}
+  })
+  .exec()
+  .then(products => {
+    amount=0;
+    products.forEach((product)=>{
+
+      if(product.status==='Available'){
+        amount=amount+(product.price*getcount((product._id).toString())) 
+      }
+
+    })
+    if (req.body.amount===amount && amount!=0){
+      next();
+    }
+    else{
+      res.status(400).json({
+        message:"amount is wrong"
+      });
+    
+    }
+  
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(500).json({
+      error: err
+  });
+  });
+}
+
+   
+
+
+router.post('/create',userauth,checkaddress,checkamount,(req,res,next)=>{
+  console.log(req.body.products)
   const order = new temporder({
     _id: new mongoose.Types.ObjectId(),
     user:req.userData.userId,
-    
-  
+    address:req.body.address,
+    pincode:req.body.pincode,
+    amount:req.body.amount,
+    productlist:req.body.products
   });
-
-   
-    Insta.createPayment({amount:5000,
+  order.save()
+  .then((order)=>{
+    console.log(order)
+    Insta.createPayment({amount:req.body.amount,
         purpose:'sale',
-        buyer_name:"digitalarena",
+      buyer_name:order._id.toString(),
         email:'digitalarena@da.com',
         phone:'9999999999',
         redirect_url:process.env.SELF_URL+'/orders/handlepayment',
@@ -33,35 +118,55 @@ router.post('/create',(req,res,next)=>{
          },function(error, response) {
             if (error) {
               console.log(error)
-              res.status(400).send("yup")
+            res.status(400).json({err:error})
             } else {
               // Payment redirection link at response.payment_request.longurl
 
               const link = (JSON.parse(response)).payment_request.longurl
-
-              return res.status(200).json({payment_link:link})
-            }
-            
+            console.log(link)
+            res.status(200).json({payment_link:link})
+            } 
           })
-
-    
+  })
+  .catch((err)=>{
+    console.log(err)
+    return res.status(400).json({
+      err:err
+    })  
+ })
  })
 
  router.get('/handlepayment',(req,res,next)=>{
-   const payment_id = req.query.payment_id; //
+   const payment_id = req.query.payment_id //
    const payment_request_id =req.query.payment_request_id
+   console.log(payment_id,payment_request_id);
    Insta.getPaymentDetails(payment_request_id, payment_id, function(error, response) {
     if (error) {
-      console.log(error)
       res.redirect('http://www.youtube.com')
     } else {
-      if (response.success===true){
-        res.redirect('http://www.google.com')
+      if (response.payment_request.status==='Completed'){
+        console.log(response)
+        // res.redirect(process.env.CLIENT_URL+'/order/success')
+       
+        temporder.findOne({_id:response.payment_request.buyer_name})
+        .then(result => {
+          console.log(result); 
+          res.status(201).json({
+            message: result
+          });
+        })
+        .catch(err => {
+          console.log(err);
+          res.status(500).json({
+            error: err
+          });
+        });   
+        
       }
       else{
+        console.log(response)
         res.redirect('http://www.youtube.com')
       }
-  
     }
   });
 

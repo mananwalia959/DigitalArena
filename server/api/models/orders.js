@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 
-
 let schema = mongoose.Schema({
+    payment_id:String,
+    payment_request_id:{type:String,unique: true,},
     id: mongoose.Schema.Types.ObjectId,
     pincode:Number,
     amount:Number,
     user:{type:  mongoose.Schema.Types.ObjectId, ref: 'users'},
     productlist:[
         {
-            _id: false,
             productid: {
                 type:mongoose.Schema.Types.ObjectId, ref: 'products'
             },
@@ -19,10 +19,9 @@ let schema = mongoose.Schema({
             }
 
         }
-    ],
-    createdAt: { type: Date, expires: '1440m', default: Date.now }
-});
+    ]
+}, );
 
 
-module.exports=mongoose.model('temporder', schema);
 
+module.exports=mongoose.model('orders', schema);
