@@ -8,6 +8,7 @@ let schema = mongoose.Schema({
     id: mongoose.Schema.Types.ObjectId,
     pincode:Number,
     amount:Number,
+    address:String,
     user:{type:  mongoose.Schema.Types.ObjectId, ref: 'User'},
     createdAt:{type:Date,default:Date.now},
     status:{type:String,enum:['About to be dispatched','Dispatched','Delievered'],default:'About to be dispatched'},

@@ -25,21 +25,23 @@ class Orders extends Component {
   render() {
     return (
       <div>
+
+      {this.state.orders.length===0?<h1> There are no orders </h1>:""}
       
-     
     { this.state.orders.map(order => (
-      <div key='order._id'>
+      <div key={order._id}>
         <div className='nav-bar navbar-dark bg-dark'>
         <div className='row'>
         <h3 className='navbar-brand col-6 col-md-8 pd-x-2'>Order no:{order._id}</h3> 
         <h3 className='navbar-brand col-6 col-md-3 centereverything text-info'>Rs.{order.amount}</h3>    
         </div> 
         </div> 
+        <div> <h4>Status:{order.status}</h4></div>
         <div>
         {console.log(  order.productlist.length)}
 
        
-        <ProductList products={order.productlist.map(product=>({count:product.count,...product.productid}))} />
+        <ProductList products={order.productlist.map(product=>({count:product.count,...product.productid}))} order={order._id} />
         
         </div>
       </div>

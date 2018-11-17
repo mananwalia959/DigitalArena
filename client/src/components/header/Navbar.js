@@ -50,7 +50,10 @@ class Navbar extends Component {
       <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
         <div className="container">
           <Link className="navbar-brand" to="/">
-            Digital Arena
+            Digital Arena 
+          </Link>
+          <Link className="navbar-brand" to="/">
+          <button className="btn btn-primary"><i className="fa fa-home"></i> Home</button>
           </Link>
           <button
             className="navbar-toggler"

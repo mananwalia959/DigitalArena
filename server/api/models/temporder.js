@@ -5,6 +5,7 @@ let schema = mongoose.Schema({
     id: mongoose.Schema.Types.ObjectId,
     pincode:Number,
     amount:Number,
+    address:String,
     user:{type:  mongoose.Schema.Types.ObjectId, ref: 'users'},
     productlist:[
         {
