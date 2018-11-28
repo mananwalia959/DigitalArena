@@ -4,11 +4,12 @@
   "description": "An E-commerce site",
   "main": "index.js",
   "engines": {
-    "node": "10.4.0"
+    "node": "10.4.0",
+     "yarn": "1.7.0"
   },
   "scripts": {
     "start": "node server/server.js",
-    "heroku-postbuild": "npm install --prefix server && npm install --prefix client && npm run build --prefix client  "
+    "heroku-postbuild": "yarn install --prefix server && npm install --prefix client && npm run build --prefix client  "
   },
   "repository": {
     "type": "git",
