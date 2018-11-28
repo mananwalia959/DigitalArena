@@ -5,11 +5,11 @@
   "main": "index.js",
   "engines": {
     "node": "10.4.0",
-     "yarn": "1.7.0"
+    "yarn": "1.7.0"
   },
   "scripts": {
     "start": "node server/app.js",
-    "heroku-postbuild": "yarn install --prefix server && npm install --prefix client && npm run build --prefix client  "
+    "heroku-postbuild": "yarn install --prefix server && npm install --prefix client && npm run build --prefix client"
   },
   "repository": {
     "type": "git",
@@ -19,5 +19,19 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/mananwalia959/DigitalArena/issues"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3",
+    "instamojo-nodejs": "0.0.5",
+    "jsonwebtoken": "^8.3.0",
+    "moment": "^2.22.2",
+    "mongoose": "^5.3.0",
+    "morgan": "^1.9.1",
+    "multer": "^1.4.0",
+    "nodemon": "^1.18.4"
   }
 }
