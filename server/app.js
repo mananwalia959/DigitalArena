@@ -77,5 +77,5 @@ app.get('/', function (req, res) {
 
 //  app hosted
 app.listen(process.env.PORT || 5000 , () => {
-    console.log("Server running on port",port);
+    console.log("Server running on port");
 });
