@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Api for e-commerce",
   "main": "index.js",
+  "engines": {
+    "node": "10.4.0"
+  },
   "scripts": {
     "server": "nodemon app.js"
   },
