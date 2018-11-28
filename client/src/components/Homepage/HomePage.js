@@ -19,7 +19,12 @@ class HomePage extends Component {
         products:response.data.products
       }))
     })
-    .catch()
+    .catch((error)=>{
+      console.log(error);
+      this.setState(()=>({
+        loaded:true,
+      }))
+    })
    
   }
   render() {

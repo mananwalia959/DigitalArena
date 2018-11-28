@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const bodyParser=require('body-parser');
 const mongoose =require('mongoose');
 var cors = require('cors');
+const path= require('path')
 
 //importing routes
  const productRoutes = require('./api/routes/products');
@@ -21,7 +22,13 @@ mongoose.connect(
         'useCreateIndex': true
     }
 )
-
+.then(()=>{
+    console.log("db connected")
+})
+.catch((err)=>{
+   console.log(err);
+   process.exit()
+})
 //Middlewares
 app.use(morgan('dev'));
 app.use('/uploads', express.static('uploads'));
@@ -34,18 +41,18 @@ app.use(cors());
 
 
 //Routes used
-app.use('/products',productRoutes);
-app.use('/cart',cartRoutes);
-app.use('/orders',orderRoutes);
-app.use("/user", userRoutes);
+app.use('/api/products',productRoutes);
+app.use('/api/cart',cartRoutes);
+app.use('/api/orders',orderRoutes);
+app.use("/api/user", userRoutes);
 
-app.use((req,res,next)=>{
+app.use('/api',(req,res,next)=>{
     const error = new Error('Not found');
     error.status=404;
     next(error);
 })
 
-app.use((error,req,res,next) => {
+app.use('/api',(error,req,res,next) => {
     res.status(error.status|| 500);
     res.json({
         error:{
@@ -55,6 +62,18 @@ app.use((error,req,res,next) => {
 
 })
 
+    
+app.use(express.static(path.join(__dirname,'..','client', 'build')));
+
+app.get('/ping', function (req, res) {
+    return res.send('pong');
+});
+
+app.get('/', function (req, res) {
+    res.sendFile(path.join(__dirname,'..','client', 'build', 'index.html'));
+});
+
+  
 
 port = process.env.PORT ?process.env.PORT : 5000;
 
