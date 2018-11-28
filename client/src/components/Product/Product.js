@@ -58,7 +58,7 @@ export class Product extends React.Component {
             :
             <button className = "btn btn-primary" onClick={()=>{
               this.props.addToCart(this.props.match.params.id)
-            }}>Add to cart</button>
+            }}>{this.props.cart.productList.length>=20?"Cart is Full":"Add to Cart"}</button>
           }</div>
 
         :

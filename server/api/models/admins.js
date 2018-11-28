@@ -9,8 +9,14 @@ const Schema = mongoose.Schema({
         match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
     },
     password: { type: String,
-         required: true
+         required: true,
+         match: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/
+        },
+        status:{
+            type:String,
+            default:"active"
         }
 });
+
 
 module.exports = mongoose.model('admin', Schema);
