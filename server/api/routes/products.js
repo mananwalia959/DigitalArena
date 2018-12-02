@@ -154,4 +154,28 @@ router.post('/getproductsbyid',(req,res,next)=>{
 })
 
 
+// router.get("/test4",(req,res,next)=>{
+//   const product= new Product({
+//     _id: new mongoose.Types.ObjectId(),
+//             imagePath:"https://images-na.ssl-images-amazon.com/images/S/cmx-images-prod/Item/36195/DIG002888_3._SX360_QL80_TTD_.jpg",
+//             title:"Devil May Cry",
+//             description:"Dante is the legendary son of sparda",
+//             price:800,
+//         });
+//       product.save();
+
+// })
+
+// router.get("/test7",(req,res,next)=>{
+//   const product= new Product({
+//     _id: new mongoose.Types.ObjectId(),
+//             imagePath:"https://images-na.ssl-images-amazon.com/images/S/cmx-images-prod/Item/36195/DIG002888_3._SX360_QL80_TTD_.jpg",
+//             title:"Devil May Cry",
+//             description:"Dante is the legendary son of sparda",
+//             price:800,
+//         });
+//       product.save();
+
+// })
+
 module.exports = router;
